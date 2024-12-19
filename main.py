@@ -33,7 +33,7 @@ for epoch in range(50):
       loss.backward()
       optimizer.step()
       epoch_loss += loss.item()
-      print(f"{i + 1}: {epoch_loss}")
+      print(f"Batch{i + 1}Loss: {loss}")
 
 
   print(f"Epoch {epoch + 1}, Loss: {epoch_loss / len(dataloader)}")
