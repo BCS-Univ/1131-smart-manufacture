@@ -4,6 +4,15 @@ import torch.optim as optim
 import torch.nn as nn
 from data.dataset import ManufacturingData
 from models.gcn_model import DetectionGCN
+import numpy as np
+
+import time
+
+
+def jagged_sleep(base_time=0.2, shape=2.0):
+    pareto_sample = np.random.pareto(shape) + 1
+    sleep_time = base_time * pareto_sample
+    time.sleep(sleep_time)
 
 data = torch.randn(128, 10) 
 label = torch.randint(0, 2, (128,))
@@ -34,6 +43,7 @@ for epoch in range(50):
       optimizer.step()
       epoch_loss += loss.item()
       print(f"Batch{i + 1}Loss: {loss}")
+      jagged_sleep()
 
 
   print(f"Epoch {epoch + 1}, Loss: {epoch_loss / len(dataloader)}")
@@ -45,3 +55,5 @@ with torch.no_grad():
         output = model(batch_data, edge_index.to(device))
         predictions = torch.argmax(output, dim=1)
         print(output)
+        print(predictions)
+        print("--------------------------")
