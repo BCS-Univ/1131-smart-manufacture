@@ -2,6 +2,7 @@ import torch
 from torch.utils.data import DataLoader
 import torch.optim as optim
 import torch.nn as nn
+from torch.cuda.amp import autocast
 from data.dataset import ManufacturingData
 from models.gcn_model import DetectionGCN
 import numpy as np
@@ -45,11 +46,10 @@ for epoch in range(50):
         optimizer.zero_grad()
         batch_data, batch_labels = batch_data.to(device), batch_labels.to(device)
 
-      
+        with torch.amp.autocast('cuda'):
+            output = model(batch_data, edge_index.to(device))
+            loss = norm(output, batch_labels)
 
-        output = model(batch_data, edge_index.to(device))
-
-        loss = norm(output, batch_labels)
         loss.backward()
         optimizer.step()
         
